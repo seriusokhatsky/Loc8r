@@ -1,0 +1,21 @@
+{
+  "name": "Loc8r",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Serg <seriu_1995@list.ru>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/seriusokhatsky/Loc8r",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6"
+  }
+}

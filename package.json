@@ -16,6 +16,8 @@
   },
   "devDependencies": {
     "connect-livereload": "^0.5.4",
+    "grunt-bower-task": "^0.4.0",
+    "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-watch": "^0.6.1"
   }
 }
