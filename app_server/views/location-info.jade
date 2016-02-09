@@ -53,8 +53,7 @@ block content
 											+outputRating(review.rating)
 										span.reviewAuthor= review.author
 										small.reviewTimestamp= review.date
-									.col-xs-12
-										p !{(review.review).replace(/\n/g, '<br/>')}
+									p !{(review.review).replace(/\n/g, '<br/>')}
 
 		.col-xs-12.col-md-3
 			p.lead #{location.name} #{sidebar.context}
