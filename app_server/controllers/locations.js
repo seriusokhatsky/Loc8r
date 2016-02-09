@@ -36,12 +36,14 @@ module.exports.locationInfo = function(req, res){
 				{
 					days: 'Monday - Friday',
 					opening: '7:00am',
-					closing: '7:00pm'
+					closing: '7:00pm',
+					closed: false
 				},
 				{
 					days: 'Saturday',
 					opening: '8:00am',
-					closing: '5:00pm'
+					closing: '5:00pm',
+					closed: false
 				},
 				{
 					days: 'Sunday',
