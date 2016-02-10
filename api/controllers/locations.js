@@ -41,17 +41,24 @@ module.exports.locationsListByDistance = function(req, res) {
 	};
 	Loc.geoNear(point, geoOptions, function(err, results, stats) {
 		var locations = [];
-		results.forEach(function(doc) {
-			locations.push({
-				distance: parseInt(doc.dis),
-				name: doc.obj.name,
-				address: doc.obj.address,
-				rating: doc.obj.rating,
-				facilities: doc.obj.facilities,
-				_id: doc.obj._id
-			}); 
-		});
-		sendJsonResponse(res, 200, locations);
+
+		if( results && results.length > 0 ){
+			results.forEach(function(doc) {
+				locations.push({
+					distance: parseInt(doc.dis),
+					name: doc.obj.name,
+					address: doc.obj.address,
+					rating: doc.obj.rating,
+					facilities: doc.obj.facilities,
+					_id: doc.obj._id
+				}); 
+			});
+			sendJsonResponse(res, 200, locations);
+		} else {
+			sendJsonResponse(res, 404, {
+				message: 'No results'
+			});
+		}
 	});
 };
 
@@ -107,8 +114,55 @@ module.exports.locationsReadOne = function(req, res) {
 	}
 };
 
-module.exports.locationUpdate = function(req, res) {
-	
+module.exports.locationUpdateOne = function(req, res) {
+	if( ! req.params.locationid ) {
+		sendJsonResponse(res, 404, {
+			message: 'No location id in request'
+		});
+		return;
+	}
+
+	Loc
+		.findById(req.params.locationid)
+		.select('-reviews -rating')
+		.exec(function(err, location) {
+			if( ! location ) {
+				sendJsonResponse(res, 404, {
+					message: 'Location to update not found'
+				});
+				return;
+			} else if( err ) {
+				sendJsonResponse(res, 404, err);
+				return;
+			}				
+			
+			location.name = req.body.name;
+			location.address = req.body.address;
+			location.facilities = req.body.facilities.split(",");
+			location.name = req.body.name;
+			location.coords = [
+				parseFloat(req.body.lng),
+				parseFloat(req.body.lat)
+			];
+
+			location.openingTimes = [
+				{
+					days: req.body.days1,
+					opening: req.body.opening1,
+					closing: req.body.closing1,
+					closed: req.body.closed1
+				}
+			];
+
+			location.save(function(err, location) {
+				if(err) {
+					sendJsonResponse(res, 400, err);
+				} else {
+					sendJsonResponse(res, 200, location);
+				}
+			});
+		});
+
 };
 
 module.exports.locationDelete = function(req, res) {

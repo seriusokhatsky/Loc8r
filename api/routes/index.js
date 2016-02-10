@@ -6,13 +6,13 @@ var ctrlReviews = require('../controllers/reviews');
 router.get('/locations', ctrlLocations.locationsListByDistance);
 router.post('/locations', ctrlLocations.locationCreate);
 router.get('/locations/:locationid', ctrlLocations.locationsReadOne);
-router.put('/locations/:locationsid', ctrlLocations.locationUpdate);
+router.put('/locations/:locationid', ctrlLocations.locationUpdateOne);
 router.delete('/locations/:locationsid', ctrlLocations.locationDelete);
 
 router.get('/locations/:locationid/reviews', ctrlReviews.reviewsList);
 router.post('/locations/:locationid/reviews', ctrlReviews.reviewCreate);
 router.get('/locations/:locationid/reviews/:reviewid', ctrlReviews.reviewsReadOne);
-router.put('/locations/:locationid/reviews/:reviewid', ctrlReviews.reviewUpdate);
+router.put('/locations/:locationid/reviews/:reviewid', ctrlReviews.reviewUpdateOne);
 router.delete('/locations/:locationid/reviews/:reviewid', ctrlReviews.reviewDelete);
 
 module.exports = router;
