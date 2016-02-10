@@ -178,7 +178,49 @@ module.exports.reviewCreate = function(req, res) {
 };
 
 module.exports.reviewUpdateOne = function(req, res) {
-	
+	if( ! req.params.locationid || ! req.params.reviewid   ) {
+		sendJsonResponse(res, 404, {
+			message: 'No location or review id in request'
+		});
+		return;
+	}
+
+	Loc
+		.findById(req.params.locationid)
+		.select('reviews')
+		.exec(function(err, location) {
+			var thisReview;
+			if( ! location ) {
+				sendJsonResponse(res, 404, {
+					message: 'Location to update not found'
+				});
+				return;
+			} else if( err ) {
+				sendJsonResponse(res, 404, err);
+				return;
+			}			
+
+			if(location.reviews && location.reviews.length > 0 ) {
+				thisReview = location.reviews.id(req.params.reviewid);
+
+				thisReview.author = req.body.author;
+				thisReview.rating = req.body.rating;
+				thisReview.review = req.body.text;
+
+				location.save(function(err, location) {
+					if(err) {
+						sendJsonResponse(res, 400, err);
+					} else {
+						updateAverageRating(location._id);
+						sendJsonResponse(res, 201, thisReview);
+					}
+				});
+			} else {
+				sendJsonResponse(res, 404, {
+					message: 'No reviews to update'
+				});
+			}
+		});
 };
 
 module.exports.reviewDelete = function(req, res) {
