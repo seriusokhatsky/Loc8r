@@ -10,11 +10,11 @@ var theEarth = (function() {
 	var earhRadius = 6371; // in km
 
 	var getDistanceFromRads = function(rads) {
-		return rads * earhRadius;
+		return parseFloat( rads * earhRadius );
 	};
 
 	var getRadsFromDistance = function(distance) {
-		return distance / earhRadius;
+		return parseFloat( distance / earhRadius );
 	};
 
 	return {
@@ -26,34 +26,61 @@ var theEarth = (function() {
 
 module.exports.locationsListByDistance = function(req, res) {
 
-	var lng = parseFloat(req.params.lng);
-	var lat = parseFloat(req.params.lat);
+	var lng = parseFloat(req.query.lng);
+	var lat = parseFloat(req.query.lat);
+	var maxDistance = (req.query.maxDistance && req.query.maxDistance > 0) ? parseFloat(req.query.maxDistance) : 5000;
 
 	var point = {
 		type: "Point",
 		coordinates: [lng, lat]
 	};
-
 	var geoOptions = {
 		spherical: true,
-		maxDistance: theEarth.getRadsFromDistance(5),
+		maxDistance: maxDistance,
 		num: 10
 	};
-
-	Loc.geoNear(point, geoOptions, function(err, locations) {
-		if( ! locations ) {
-			sendJsonResponse(res, 404, {
-				message: 'Locations not found'
-			});
-		} else if( err ) {
-			sendJsonResponse(res, 404, err);
-		} else {
-			sendJsonResponse(res, 200, locations);
-		}
+	Loc.geoNear(point, geoOptions, function(err, results, stats) {
+		var locations = [];
+		results.forEach(function(doc) {
+			locations.push({
+				distance: parseInt(doc.dis),
+				name: doc.obj.name,
+				address: doc.obj.address,
+				rating: doc.obj.rating,
+				facilities: doc.obj.facilities,
+				_id: doc.obj._id
+			}); 
+		});
+		sendJsonResponse(res, 200, locations);
 	});
 };
 
 module.exports.locationCreate = function(req, res) {
+
+	Loc.create({
+		name: req.body.name,
+		address: req.body.address,
+		facilities: req.body.facilities.split(","),
+		coords: [
+			parseFloat(req.body.lng),
+			parseFloat(req.body.lat)
+		],
+		openingTimes: [
+			{
+				days: req.body.days1,
+				opening: req.body.opening1,
+				closing: req.body.closing1,
+				closed: req.body.closed1
+			}
+		],
+		reviews: []
+	}, function(err, location) {
+		if(err) {
+			sendJsonResponse(res, 400, err);
+		} else {
+			sendJsonResponse(res, 201, location);
+		}
+	});
 	
 };
 
