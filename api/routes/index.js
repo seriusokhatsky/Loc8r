@@ -7,7 +7,7 @@ router.get('/locations', ctrlLocations.locationsListByDistance);
 router.post('/locations', ctrlLocations.locationCreate);
 router.get('/locations/:locationid', ctrlLocations.locationsReadOne);
 router.put('/locations/:locationid', ctrlLocations.locationUpdateOne);
-router.delete('/locations/:locationsid', ctrlLocations.locationDelete);
+router.delete('/locations/:locationid', ctrlLocations.locationDelete);
 
 router.get('/locations/:locationid/reviews', ctrlReviews.reviewsList);
 router.post('/locations/:locationid/reviews', ctrlReviews.reviewCreate);

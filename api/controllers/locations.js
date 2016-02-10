@@ -135,7 +135,7 @@ module.exports.locationUpdateOne = function(req, res) {
 				sendJsonResponse(res, 404, err);
 				return;
 			}				
-			
+
 			location.name = req.body.name;
 			location.address = req.body.address;
 			location.facilities = req.body.facilities.split(",");
@@ -166,5 +166,27 @@ module.exports.locationUpdateOne = function(req, res) {
 };
 
 module.exports.locationDelete = function(req, res) {
-	
+	if( ! req.params.locationid ) {
+		sendJsonResponse(res, 404, {
+			message: 'No location id in request'
+		});
+		return;
+	}
+
+	Loc
+		.findByIdAndRemove(req.params.locationid)
+		.exec(function(err, location) {
+			if( ! location ) {
+				sendJsonResponse(res, 404, {
+					message: 'Location to remove not found'
+				});
+				return;
+			} else if( err ) {
+				sendJsonResponse(res, 404, err);
+				return;
+			}				
+		
+			sendJsonResponse(res, 204, null);
+			
+		});
 };

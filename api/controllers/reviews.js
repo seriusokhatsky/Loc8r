@@ -224,5 +224,49 @@ module.exports.reviewUpdateOne = function(req, res) {
 };
 
 module.exports.reviewDelete = function(req, res) {
-	
+	if( ! req.params.locationid || ! req.params.reviewid   ) {
+		sendJsonResponse(res, 404, {
+			message: 'No location or review id in request'
+		});
+		return;
+	}
+
+	Loc
+		.findById(req.params.locationid)
+		.select('reviews')
+		.exec(function(err, location) {
+			var thisReview;
+			if( ! location ) {
+				sendJsonResponse(res, 404, {
+					message: 'Location to remove review not found'
+				});
+				return;
+			} else if( err ) {
+				sendJsonResponse(res, 404, err);
+				return;
+			}			
+
+			if(location.reviews && location.reviews.length > 0 ) {
+				if (!location.reviews.id(req.params.reviewid)) {
+					sendJsonResponse(res, 404, {
+						"message": "reviewid not found"
+					});
+				}
+
+				location.reviews.id(req.params.reviewid).remove();
+
+				location.save(function(err, location) {
+					if(err) {
+						sendJsonResponse(res, 404, err);
+					} else {
+						updateAverageRating(location._id);
+						sendJsonResponse(res, 204, null);
+					}
+				});
+			} else {
+				sendJsonResponse(res, 404, {
+					message: 'No reviews to delete'
+				});
+			}
+		});
 };
