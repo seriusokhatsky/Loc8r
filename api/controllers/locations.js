@@ -42,7 +42,9 @@ module.exports.locationsListByDistance = function(req, res) {
 	Loc.geoNear(point, geoOptions, function(err, results, stats) {
 		var locations = [];
 
-		if( results && results.length > 0 ){
+		if( err ) {
+			sendJsonResponse(res, 404, err);
+		} else {
 			results.forEach(function(doc) {
 				locations.push({
 					distance: parseInt(doc.dis),
@@ -54,10 +56,6 @@ module.exports.locationsListByDistance = function(req, res) {
 				}); 
 			});
 			sendJsonResponse(res, 200, locations);
-		} else {
-			sendJsonResponse(res, 404, {
-				message: 'No results'
-			});
 		}
 	});
 };
