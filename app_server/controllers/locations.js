@@ -40,6 +40,36 @@ var renderHomepage = function(req, res, responseBody) {
 	});
 }
 
+var renderAddReview = function(req, res, message, review) {
+
+	getLocationInfo(req, res, function(req, res, data) {
+		res.render('location-review-form', { 
+			title: 'Leave review for '  + data.name,
+			message: message,
+			review: review,
+			location: data
+		});
+	});
+
+
+}
+
+var _showError = function (req, res, status) {
+	var title, content;
+	if (status === 404) {
+		title = "404, page not found";
+		content = "Oh dear. Looks like we can't find this page. Sorry.";
+	} else {
+		title = status + ", something's gone wrong";
+		content = "Something, somewhere, has gone just a little bit wrong.";
+	}
+	res.status(status);
+	res.render('generic-text', {
+		title : title,
+		content : content
+	});
+};
+
 module.exports.homelist = function(req, res){
 
 	var path = '/api/locations';
@@ -91,8 +121,7 @@ var renderInfoPage = function(req, res, locationDetails) {
 	});
 };
 
-module.exports.locationInfo = function(req, res){
-
+var getLocationInfo = function(req, res, callback) {
 	var path = '/api/locations/' + req.params.locationid;
 
 	var requestOptions = {
@@ -112,16 +141,56 @@ module.exports.locationInfo = function(req, res){
 				lng: body.coords[0],
 				lat: body.coords[1]
 			};
-			renderInfoPage(req, res, data);
+			callback(req, res, data);
 
 		} else {
-			console.log(response.statusCode);
+			_showError(req, res, response.statusCode);
 		}
+	});
+};
+
+module.exports.locationInfo = function(req, res){
+
+	getLocationInfo(req, res, function(req, res, data) {
 		renderInfoPage(req, res, data);
 	});
 
 };
 
 module.exports.addReview = function(req, res){
-	res.render('location-review-form', { title: 'Review Starcups' });
+	renderAddReview(req, res, '', {
+		author: '',
+		rating: 5,
+		text: ''
+	});
+};
+
+module.exports.doAddReview = function(req, res){
+	var path = '/api/locations/' + req.params.locationid + '/reviews';
+
+	var newReview = {
+		author: req.body.author,
+		rating: parseInt(req.body.rating, 10),
+		text: req.body.text
+	};
+
+	var requestOptions = {
+		url: apiOptions.server + path,
+		method: 'POST',
+		json: newReview
+	};
+
+	request(requestOptions, function(err, response, body) {
+		var data = body;
+
+		if(err) {
+			console.log(err);
+		} else if(response.statusCode == 400 && body.name && body.name == 'ValidationError') {
+			renderAddReview(req, res, 'All fields are required to fill, please try again', newReview);
+		} else if(response.statusCode == 201) {
+			res.redirect('/location/' + req.params.locationid);
+		} else {
+			_showError(req, res, response.statusCode);
+		}
+	});
 };

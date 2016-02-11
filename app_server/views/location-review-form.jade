@@ -5,25 +5,32 @@ block content
 		.col-lg-12
 			h1= title
 
+	if message.length > 0
+		.alert.alert-warning
+			=message
+
 	.row
 		.col-xs-12.col-md-6
-			form.form-horizontal(action="/location", method="get", role="form")
+			form.form-horizontal(action="", method="POST", role="form")
 				.form-group
-					label.col-xs-10.col-sm-2.control-label(for="name") Name
+					label.col-xs-10.col-sm-2.control-label(for="author") Name
 					.col-xs-12.col-sm-10
-						input#name.form-control(name="name")
+						input#author.form-control(name="author", value="#{review.author}")
 				.form-group
 					label.col-xs-10.col-sm-2.control-label(for="rating") Rating
 					.col-xs-12.col-sm-2
 						select#rating.form-control.input-sm(name="rating")
-							option 5
-							option 4
-							option 3
-							option 2
-							option 1
+							option(selected=review.rating == 5) 5
+							option(selected=review.rating == 4) 4
+							option(selected=review.rating == 3) 3
+							option(selected=review.rating == 2) 2
+							option(selected=review.rating == 1) 1
 				.form-group
 					label.col-sm-2.control-label(for="review") Review
 					.col-sm-10
-						textarea#review.form-control(name="review", rows="5")
+						textarea#text.form-control(name="text", rows="5")
+							=review.text
 				button.btn.btn-default.pull-right Add my review
 		.col-xs-12.col-md-4
+			p
+				a(href="/location/#{location._id}") Back to the location
