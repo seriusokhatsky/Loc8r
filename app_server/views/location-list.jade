@@ -15,9 +15,9 @@ block content
 			p.input-group
 				label(for="filter") Filter locations
 				input.form-control#filter(type="text", name="fitler", ng-model="textFilter")
+			
+			.alert.alert-warning(ng-if="message.length > 0") {{ message }}
 
-			if message
-				.alert.alert-warning {{ message }}
 			.row.list-group
 				.col-xs-12
 					.list-group-item(ng-repeat="location in data.locations | filter : textFilter")
