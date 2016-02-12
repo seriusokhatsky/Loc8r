@@ -16,9 +16,13 @@ module.exports = function(grunt) {
             debug: false
           }
         },
-        files: {
-          "app_client/**/*.html": "app_client/jade/**/*.jade"
-        }
+        files: [ {
+          cwd: "app_client/jade/",
+          src: "**/*.jade",
+          dest: "app_client",
+          expand: true,
+          ext: ".view.html"
+        } ]
       }
     },
     watch: {
@@ -34,9 +38,7 @@ module.exports = function(grunt) {
       },
       jade: {
         files: [
-          '**/*.jade',
-          '**/*.js',
-          '**/*.css'
+          '**/*.jade'
         ],
         options: {
           livereload: true,
@@ -48,6 +50,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-jade');
 
   grunt.registerTask('default', ['watch']);
 

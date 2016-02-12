@@ -2,8 +2,9 @@ angular.module('loc8rApp', ['ngRoute']);
 
 function config($routeProvider) {
 	$routeProvider
-		.when('/', function() {
-
+		.when('/', {
+			templateUrl: 'home/home.view.html',
+			controller: 'homeCtrl'
 		})
 		.otherwise({redirectTo: '/'});
 }

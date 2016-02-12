@@ -23,7 +23,8 @@ html(ng-app="loc8rApp")
 		br
 	
 		.container
-			block content
+			div(ng-view)
+				block content
 
 			footer
 				.row
@@ -33,5 +34,6 @@ html(ng-app="loc8rApp")
 	script(src='/angular/angular.min.js')
 	script(src='/angular-route/angular-route.js')
 	script(src='/app.js')
+	script(src='/home/home.controller.js')
 	script(src='/jquery/jquery.js')
 	script(src='/bootswatch-dist/bootstrap.min.js')
