@@ -9,6 +9,18 @@ module.exports = function(grunt) {
         }
       }
     },
+    jade: {
+      compile: {
+        options: {
+          data: {
+            debug: false
+          }
+        },
+        files: {
+          "app_client/**/*.html": "app_client/jade/**/*.jade"
+        }
+      }
+    },
     watch: {
       css: {
         files: [
@@ -19,6 +31,17 @@ module.exports = function(grunt) {
         options: {
           livereload: true,
         },
+      },
+      jade: {
+        files: [
+          '**/*.jade',
+          '**/*.js',
+          '**/*.css'
+        ],
+        options: {
+          livereload: true,
+        },
+        tasks: ['jade']
       },
     }
   });
