@@ -18,8 +18,15 @@ var _formatDistance = function(l) {
 	return numDistance + unit;
 }
 
-var renderHomepage = function(req, res) {
+var renderHomepage = function(req, res, responseBody) {
 	var message = '';
+
+	if(responseBody.constructor !== Array) {
+		message = 'API lookup error';
+		responseBody = [];
+	} else if( !responseBody.length) {
+		message = 'No places found near you';
+	}
 
 	res.render('location-list', { 
 		title: 'Home list',
@@ -28,7 +35,7 @@ var renderHomepage = function(req, res) {
 			strapline: 'Find places to go work with wifi!'
 		},
 		sidebar: 'Loc8r helps you to find places to work when out and about.',
-		locations: [],
+		locations: responseBody,
 		message: message
 	});
 }
@@ -64,7 +71,36 @@ var _showError = function (req, res, status) {
 };
 
 module.exports.homelist = function(req, res){
-	renderHomepage(req, res);
+
+	var path = '/api/locations';
+
+	var requestOptions = {
+		url: apiOptions.server + path,
+		method: 'GET',
+		json: {},
+		qs: {
+			lng: 30.209210,
+			lat: 48.756087,
+			maxDistance: 2000
+		}
+	};
+
+	request(requestOptions, function(err, response, body) {
+		var data = '';
+		data = body;
+		if(err) {
+			console.log(err);
+		} else if(response.statusCode == 200 && data.length) {
+			// Convert meters to kilometers if needed
+			for (var i = data.length - 1; i >= 0; i--) {
+				data[i].distance = _formatDistance(data[i].distance);
+			};
+			renderHomepage(req, res, body);
+		} else {
+			console.log(response.statusCode);
+		}
+		renderHomepage(req, res, data);
+	});
 };
 
 var renderInfoPage = function(req, res, locationDetails) {

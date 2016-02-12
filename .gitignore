@@ -34,3 +34,5 @@ node_modules
 
 # Ignore bower
 bower_components/
+
+.idea

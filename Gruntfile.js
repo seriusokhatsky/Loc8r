@@ -8,11 +8,24 @@ module.exports = function(grunt) {
           targetDir: './public'
         }
       }
+    },
+    watch: {
+      css: {
+        files: [
+          '**/*.jade',
+          '**/*.js',
+          '**/*.css'
+        ],
+        options: {
+          livereload: true,
+        },
+      },
     }
   });
 
   grunt.loadNpmTasks('grunt-bower-task');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['bower']);
+  grunt.registerTask('default', ['watch']);
 
 };
