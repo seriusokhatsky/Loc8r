@@ -1,17 +1,42 @@
-var locationListCtrl = function($scope, loc8rData) {
-	$scope.message = 'Searching for nearby places'
-	loc8rData
-		.success(function(data) {
-			$scope.message = (data.length > 0) ? '' : 'No locations found';
-			
-			$scope.data = {
-				locations: data
-			};
-		})
-		.error(function(e) {
-			$scope.message = 'Sorry, something went wrong'
-			console.log(e);
+var locationListCtrl = function($scope, loc8rData, gelocation) {
+
+	$scope.message = 'Checking your location';
+	
+	$scope.getData = function(position) {
+		$scope.$apply(function() {
+			$scope.message = 'Searching for nearby places';
+			$scope.coords = position.coords;
 		});
+
+		loc8rData.getLocationByCoords(position.coords.longitude, position.coords.latitude)
+			.success(function(data) {
+				$scope.message = (data.length > 0) ? '' : 'No locations found';
+				
+				$scope.data = {
+					locations: data
+				};
+			})
+			.error(function(e) {
+				$scope.message = 'Sorry, something went wrong'
+				console.log(e);
+			});
+	};
+
+	$scope.showError = function(error) {
+		$scope.$apply(function() {
+			$scope.message = error.message;
+		});
+	};
+
+	$scope.noGeo = function() {
+		$scope.$apply(function() {
+			$scope.message = 'Geolocation not supported by this browser';
+		});
+	};
+
+	gelocation.getPosition($scope.getData, $scope.showError, $scope.noGeo);
+
+
 };
 
 var formatDistance = function() {
@@ -37,7 +62,28 @@ var ratingStars = function() {
 };
 
 var loc8rData = function($http) {
-	return $http.get('/api/locations/?lng=30.209210&lat=48.756087&maxDistance=2000')
+	var getLocationByCoords = function(lng, lat) {
+		return $http.get('/api/locations/?lng=' + lng + '&lat=' + lat + '&maxDistance=2000');
+	};
+
+	return {
+		getLocationByCoords: getLocationByCoords
+	};
+};
+
+var gelocation = function() {
+
+	var getPosition = function(cbSuccess, cbError, cbNoGeo) {
+		if(navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(cbSuccess, cbError);
+		} else {
+			cbNoGeo();
+		}
+	};
+
+	return {
+		getPosition: getPosition
+	};
 };
 
 angular
@@ -45,4 +91,5 @@ angular
 	.controller('locationListCtrl', locationListCtrl)
 	.filter('formatDistance', formatDistance)
 	.directive('ratingStars', ratingStars)
-	.service('loc8rData', loc8rData);
+	.service('loc8rData', loc8rData)
+	.service('gelocation', gelocation);

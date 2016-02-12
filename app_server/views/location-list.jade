@@ -8,8 +8,8 @@ block content
 				h1= pageHeader.title
 					small &nbsp;#{pageHeader.strapline}
 
-	.row
-		.col-xs-12.col-sm-8(ng-controller="locationListCtrl")
+	.row(ng-controller="locationListCtrl")
+		.col-xs-12.col-sm-8
 			p List area
 			
 			p.input-group
@@ -33,6 +33,10 @@ block content
 							span.label.label-warning(ng-repeat="facility in location.facility")
 							| {{ facility }}
 							&nbsp;
-				
+
 		.col-xs-12.col-sm-4
 			p.lead= sidebar
+			
+			h4 Your current location
+			p
+				img.img-responsive.img-rounded(ng-src="http://maps.googleapis.com/maps/api/staticmap?center={{ coords.latitude }},{{ coords.longitude }}&zoom=17&size=400x350&sensor=false&markers={{ coords.latitude }},{{ coords.longitude }}&scale=2")
