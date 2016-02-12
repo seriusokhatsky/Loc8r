@@ -40,7 +40,8 @@ var renderAddReview = function(req, res, message, review) {
 			title: 'Leave review for '  + data.name,
 			message: message,
 			review: review,
-			location: data
+			location: data,
+			url: req.originalUrl
 		});
 	});
 
