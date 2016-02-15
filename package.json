@@ -18,7 +18,8 @@
     "mongoose": "^4.4.2",
     "morgan": "~1.6.1",
     "request": "^2.69.0",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "uglify-js": "^2.6.1"
   },
   "devDependencies": {
     "connect-livereload": "^0.5.4",
