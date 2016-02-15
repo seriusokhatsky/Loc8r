@@ -1,0 +1,13 @@
+navigation
+br
+br
+
+.container
+	page-header(content="vm.pageHeader")
+
+	.row
+		.col-md-6.col-sm-12
+			p {{ vm.main.content | addHtmlLineBreaks }}
+
+
+	footer-generic

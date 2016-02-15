@@ -1,38 +1,41 @@
-#banner.page-header
+navigation
+br
+br
+
+.container
+	page-header(content="vm.pageHeader")
+
 	.row
-		.col-lg-6
-			h1 {{ vm.pageHeader.title }}
-				small &nbsp; {{ vm.pageHeader.strapline }}
+		.col-xs-12.col-sm-8
+			p List area
+			
+			p.input-group
+				label(for="filter") Filter locations
+				input.form-control#filter(type="text", name="fitler", ng-model="textFilter")
+			
+			.alert.alert-warning(ng-if="vm.message.length > 0") {{ vm.message }}
 
-.row
-	.col-xs-12.col-sm-8
-		p List area
-		
-		p.input-group
-			label(for="filter") Filter locations
-			input.form-control#filter(type="text", name="fitler", ng-model="textFilter")
-		
-		.alert.alert-warning(ng-if="vm.message.length > 0") {{ vm.message }}
+			.row.list-group
+				.col-xs-12
+					.list-group-item(ng-repeat="location in vm.data.locations | filter : textFilter")
+						h4
+							a(href="/location/{{ location._id }}") {{ location.name }}
+							&nbsp;
+							&nbsp;
+							small(rating-stars, rating="location.rating")
+							span.badge.pull-right.badge-default {{ location.distance | formatDistance }}
 
-		.row.list-group
-			.col-xs-12
-				.list-group-item(ng-repeat="location in vm.data.locations | filter : textFilter")
-					h4
-						a(href="/location/{{ location._id }}") {{ location.name }}
-						&nbsp;
-						&nbsp;
-						small(rating-stars, rating="location.rating")
-						span.badge.pull-right.badge-default {{ location.distance | formatDistance }}
+						p.address {{ location.address }}
+						p
+							span.label.label-warning(ng-repeat="facility in location.facility")
+							| {{ facility }}
+							&nbsp;
 
-					p.address {{ location.address }}
-					p
-						span.label.label-warning(ng-repeat="facility in location.facility")
-						| {{ facility }}
-						&nbsp;
+		.col-xs-12.col-sm-4
+			p.lead {{ vm.sidebar.content }}
 
-	.col-xs-12.col-sm-4
-		p.lead {{ vm.sidebar.content }}
-		
-		h4 Your current location
-		p
-			img.img-responsive.img-rounded(ng-src="http://maps.googleapis.com/maps/api/staticmap?center={{ coords.latitude }},{{ coords.longitude }}&zoom=17&size=400x350&sensor=false&markers={{ coords.latitude }},{{ coords.longitude }}&scale=2")
+			h4 Your current location
+			p
+				img.img-responsive.img-rounded(ng-src="http://maps.googleapis.com/maps/api/staticmap?center={{ coords.latitude }},{{ coords.longitude }}&zoom=17&size=400x350&sensor=false&markers={{ coords.latitude }},{{ coords.longitude }}&scale=2")
+
+	footer-generic

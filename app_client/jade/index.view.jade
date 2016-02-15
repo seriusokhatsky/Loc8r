@@ -1,0 +1,25 @@
+doctype html
+html(ng-app="loc8rApp")
+	head
+		title Loc8r
+		meta(name='viewport', content='width=device-width, initial-scale=1.0')
+		link(rel='stylesheet', href='/bootswatch-dist/bootstrap.min.css')
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		base(href="/")
+	body(ng-view)
+
+	script(src='/angular/angular.min.js')
+	script(src='/angular-route/angular-route.js')
+	script(src='/app.js')
+	script(src='/home/home.controller.js')
+	script(src='/about/about.controller.js')
+	script(src='/common/services/loc8rData.service.js')
+	script(src='/common/services/geolocation.service.js')
+	script(src='/common/filters/formatDistance.filter.js')
+	script(src='/common/filters/addHtmlLineBreaks.filter.js')
+	script(src='/common/directives/ratingStars/ratingStars.directive.js')
+	script(src='/common/directives/footerGeneric/footerGeneric.directive.js')
+	script(src='/common/directives/navigation/navigation.directive.js')
+	script(src='/common/directives/pageHeader/pageHeader.directive.js')
+	script(src='/jquery/jquery.js')
+	script(src='/bootswatch-dist/bootstrap.min.js')
