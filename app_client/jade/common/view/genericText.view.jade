@@ -7,7 +7,7 @@ br
 
 	.row
 		.col-md-6.col-sm-12
-			p {{ vm.main.content | addHtmlLineBreaks }}
+			p(ng-bind-html="vm.main.content | addHtmlLineBreaks")
 
 
 	footer-generic

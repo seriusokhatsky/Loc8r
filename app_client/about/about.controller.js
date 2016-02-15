@@ -12,7 +12,7 @@
 		};
 
 		vm.main = {
-			content: 'Loc8r was created to help people\n\n find places to sit down and get a bit of work done.Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+			content: 'Loc8r was created to help people find places to sit down and get a bit of work done.\n\n Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
 		};
 	}
 })();

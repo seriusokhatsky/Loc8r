@@ -1,0 +1,56 @@
+navigation
+br
+br
+
+.container
+	page-header(content="vm.pageHeader")
+
+	.row
+		.col-xs-12.col-md-9
+			.row
+				.col-xs-12.col-sm-6
+					p.rating
+						small(rating-stars, rating="vm.location.rating")
+					p {{ vm.location.address }}
+						.panel.panel-primary
+							.panel-heading
+								h2.panel-title Opening hours
+							.panel-body
+								p(ng-repeat="time in vm.location.openingTimes")
+									{{ time.days }} : 
+									<span class="opening-time" ng-if="time.closed">closed</span>
+									<span class="opening-time" ng-if="!time.closed">{{ time.opening + " - " + time.closing }}</span>
+						.panel.panel-primary 
+							.panel-heading
+								h2.panel-title Facilities 
+							.panel-body
+								p
+									span.label.label-warning(ng-repeat="facility in vm.location.facilities") 
+										{{ facility }} 
+									&nbsp;
+				.col-xs-12.col-sm-6.location-map 
+					.panel.panel-primary
+						.panel-heading 
+							h2.panel-title Location map
+						.panel-body 
+							img.img-responsive.img-rounded(src="http://maps.googleapis.com/maps/api/staticmap?center={{vm.location.coords[1]}},{{vm.location.coords[0]}}&zoom=17&size=400x350&sensor=false&markers={{vm.location.coords[1]}},{{vm.location.coords[0]}}&scale=2")
+			.row
+				.col-xs-12 
+					.panel.panel-primary.review-panel
+						.panel-heading 
+							a.pull-right(ng-click="vm.popupReviewForm()") Add review
+							h2.panel-title Customer reviews 
+					.panel-body.review-container
+						.row 
+							.review(ng-repeat="review in vm.location.reviews | orderBy:'date': true")
+								.well.well-sm.review-header 
+									small(rating-stars, rating="review.rating")
+									span.reviewAuthor {{ review.author }}
+									small.reviewTimestamp {{ review.date | date: 'd MMMM yyyy' }}
+								p(ng-bind-html="review.review | addHtmlLineBreaks")
+
+		.col-xs-12.col-md-3
+			p.lead {{ vm.location.name }} is on Loc8r because it has accessible wifi and space to sit down with your laptop and get some work done.
+			p If you've been and you like it - or if you don't - please leave a review to help other people just like you.
+
+	footer-generic
