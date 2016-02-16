@@ -1,0 +1,27 @@
+navigation
+br
+br
+
+.container
+	page-header(content="vm.pageHeader")
+
+	.row
+		.col-md-6.col-sm-12
+			p.lead
+			| Already a member? Please 
+			a(href='/login?page={{ vm.returnPage }}') log in instead.
+			form(ng-submit='vm.onSubmit()')
+				.alert.alert-danger(role='alert', ng-show='vm.formError') {{ vm.formError }}
+				.form-group
+					label(for='name') Full name
+					input#name.form-control(type='text', placeholder='Enter your name', ng-model='vm.credentials.name')
+				.form-group
+					label(for='email') Email address
+					input#email.form-control(type='email', placeholder='Enter email', ng-model='vm.credentials.email')
+				.form-group
+					label(for='password') Password
+					input#password.form-control(type='password', placeholder='Password', ng-model='vm.credentials.password')
+					br
+					button.btn.btn-default(type='submit') Register!
+
+	footer-generic

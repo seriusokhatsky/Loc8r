@@ -37,9 +37,10 @@ br
 			.row
 				.col-xs-12 
 					.panel.panel-primary.review-panel
-						.panel-heading 
-							a.pull-right(ng-click="vm.popupReviewForm()") Add review
-							h2.panel-title Customer reviews 
+						.panel-heading
+							a.pull-right(ng-show='vm.isLoggedIn', ng-click='vm.popupReviewForm()') Add review
+							a.pull-right(ng-hide='vm.isLoggedIn', href='/#/login?page={{ vm.currentPath }}') Login to add review
+							h2.panel-title Customer reviews
 					.panel-body.review-container
 						.row 
 							.review(ng-repeat="review in vm.location.reviews | orderBy:'date': true")

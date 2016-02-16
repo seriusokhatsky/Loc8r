@@ -9,10 +9,6 @@
 		.modal-body
 			.alert.alert-danger(role="alert", ng-show="vm.formError") {{ vm.formError }}
 			.form-group
-				label.col-xs-2.col-sm-2.control-label(for='name') Name
-				.col-xs-10.col-sm-10
-					input#name.form-control(name='name', ng-model='vm.formData.name')
-			.form-group
 				label.col-xs-10.col-sm-2.control-label(for='rating') Rating
 				.col-xs-10.col-sm-2
 					select#rating.form-control.input-sm(name='rating', ng-model='vm.formData.rating')

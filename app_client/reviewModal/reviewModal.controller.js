@@ -17,7 +17,6 @@
 			vm.doAddReview = function(locationid, data) {
 				
 				loc8rData.addReviewById(locationid, {
-					author: data.name,
 					rating: data.rating,
 					text: data.reviewText
 				})
@@ -32,7 +31,7 @@
 
 			vm.onSubmit = function() {
 
-				if(!vm.formData.name || !vm.formData.rating || !vm.formData.reviewText) {
+				if(!vm.formData.rating || !vm.formData.reviewText) {
 					vm.formError = 'All fields are required, please try again.';
 				} else {
 					vm.doAddReview(vm.locationData.locationid, vm.formData);

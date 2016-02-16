@@ -1,0 +1,26 @@
+navigation
+br
+br
+
+.container
+  page-header(content="vm.pageHeader")
+
+  .row
+    .col-md-6.col-sm-8
+      p.lead
+        | Not a member? Please 
+        a(href='/register?page={{ vm.returnPage }}') register first.
+      form(ng-submit='vm.onSubmit()')
+        .alert.alert-danger(role='alert', ng-show='vm.formError') {{ vm.formError }}
+        .form-group
+          label(for='email') Email address
+          | Note that name input is removed
+          | ￼
+          input#email.form-control(type='email', placeholder='Enter email', ng-model='vm.credentials.email')
+        .form-group
+          label(for='password') Password
+          input#password.form-control(type='password', placeholder='Password', ng-model='vm.credentials.password')
+        button.btn.btn-default(type='submit') Sign in!
+
+  footer-generic 
+

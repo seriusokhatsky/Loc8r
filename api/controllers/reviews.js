@@ -1,5 +1,30 @@
 var mongoose = require('mongoose');
 var Loc = mongoose.model('Location');
+var User = mongoose.model('User');
+
+var getAuthor = function(req, res, callback) {
+	if (req.payload && req.payload.email) {
+		User
+			.findOne({ email : req.payload.email })
+			.exec(function(err, user) {
+				if (!user) {
+					sendJSONresponse(res, 404, {
+						"message": "User not found"
+					});
+				} else if (err) {
+					console.log(err);
+					sendJSONresponse(res, 404, err);
+					return;
+				}
+				callback(req, res, user.name);
+			});
+	} else {
+		sendJSONresponse(res, 404, {
+			"message": "User not found"
+		});
+		return; 
+	}
+};
 
 var sendJsonResponse = function(res, status, content) {
 	res.status(status);
@@ -39,7 +64,7 @@ var doSetAvarageRating = function(location) {
 	}
 }
 
-var doAddReview = function(req, res, location) {
+var doAddReview = function(req, res, location, author) {
 	if( ! location ) {
 		sendJsonResponse(res, 404, {
 			message: 'Location not found'
@@ -48,7 +73,7 @@ var doAddReview = function(req, res, location) {
 	}
 
 	location.reviews.push({
-		author: req.body.author,
+		author: author,
 		rating: req.body.rating,
 		review: req.body.text
 	});
@@ -153,27 +178,29 @@ module.exports.reviewsList = function(req, res) {
 
 module.exports.reviewCreate = function(req, res) {
 
+	getAuthor(req, res, function(req, res, userName) {
 
-	if( req.params && req.params.locationid ) {
-		var locationid = req.params.locationid;
+		if( req.params && req.params.locationid ) {
+			var locationid = req.params.locationid;
 
-		Loc
-			.findById(locationid)
-			.select('reviews')
-			.exec(function(err, location) {
-				if( err ) {
-					sendJsonResponse(res, 404, err);
-					return;
-				}
-				
-				doAddReview(req, res, location);
+			Loc
+				.findById(locationid)
+				.select('reviews')
+				.exec(function(err, location) {
+					if( err ) {
+						sendJsonResponse(res, 404, err);
+						return;
+					}
+					
+					doAddReview(req, res, location, userName);
 
+				});
+		} else {
+			sendJsonResponse(res, 404, {
+				message: 'No location id in request'
 			});
-	} else {
-		sendJsonResponse(res, 404, {
-			message: 'No location id in request'
-		});
-	}
+		}		
+	});
 	
 };
 
