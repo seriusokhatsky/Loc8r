@@ -51,6 +51,13 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+      js: {
+        files: [
+          '**/*.js',
+          '!public/angular/loc8rApp.js'
+        ],
+        tasks: ['uglify']
+      },
       css: {
         files: [
           '**/*.jade',

@@ -36,6 +36,6 @@ br
 
 			h4 Your current location
 			p
-				img.img-responsive.img-rounded(ng-src="http://maps.googleapis.com/maps/api/staticmap?center={{ coords.latitude }},{{ coords.longitude }}&zoom=17&size=400x350&sensor=false&markers={{ coords.latitude }},{{ coords.longitude }}&scale=2")
+				img.img-responsive.img-rounded(ng-src="http://maps.googleapis.com/maps/api/staticmap?center={{ vm.data.coords.lat }},{{ vm.data.coords.lng }}&zoom=17&size=400x350&sensor=false&markers={{ vm.data.coords.lat }},{{ vm.data.coords.lng }}&scale=2")
 
 	footer-generic
